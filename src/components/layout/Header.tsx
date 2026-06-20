@@ -21,7 +21,7 @@ export function Header() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-valid opacity-60" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-valid" />
           </span>
-          Sistema operativo
+          En linea
         </div>
       </div>
     </header>
