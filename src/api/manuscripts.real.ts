@@ -1,7 +1,6 @@
 // Cliente real del API Gateway.
-// Hoy solo confirmado: POST /manuscripts/upload-url
-// getManuscriptStatus y getManuscriptResults siguen apuntando a datos simulados
-// hasta que el equipo de backend confirme esos 2 endpoints — ver TODOs abajo.
+// Los 3 endpoints del Manifiesto ya están confirmados y conectados:
+// POST upload-url, GET status, GET results.
 
 import type {
   ManuscriptResultsResponse,
@@ -9,7 +8,6 @@ import type {
   UploadUrlRequest,
   UploadUrlResponse,
 } from "../types/manuscript";
-import * as mock from "./manuscripts.mock";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string | undefined;
 
@@ -57,33 +55,28 @@ export async function uploadFileToStorage(uploadUrl: string, file: File): Promis
 
 /**
  * GET /api/v1/manuscripts/{manuscriptId}
- *
- * TODO(equipo-backend): confirmar si este endpoint ya existe.
- * Mientras no esté confirmado, usamos el mock para no romper el flujo del front.
- * Cuando exista: descomentar el fetch real y borrar la línea del mock.
+ * Conectado al backend real.
  */
 export async function getManuscriptStatus(
   manuscriptId: string,
 ): Promise<ManuscriptStatusResponse> {
-  // return fetch(`${requireBaseUrl()}/api/v1/manuscripts/${manuscriptId}`).then((r) => {
-  //   if (!r.ok) throw new Error(`status falló con ${r.status}`);
-  //   return r.json();
-  // });
-  return mock.getManuscriptStatus(manuscriptId);
+  const res = await fetch(`${requireBaseUrl()}/api/v1/manuscripts/${manuscriptId}`);
+  if (!res.ok) {
+    throw new Error(`status falló con status ${res.status}`);
+  }
+  return res.json();
 }
 
 /**
  * GET /api/v1/manuscripts/{manuscriptId}/results
- *
- * TODO(equipo-backend): confirmar si este endpoint ya existe.
- * Mismo patrón que getManuscriptStatus arriba.
+ * Conectado al backend real.
  */
 export async function getManuscriptResults(
   manuscriptId: string,
 ): Promise<ManuscriptResultsResponse> {
-  // return fetch(`${requireBaseUrl()}/api/v1/manuscripts/${manuscriptId}/results`).then((r) => {
-  //   if (!r.ok) throw new Error(`results falló con ${r.status}`);
-  //   return r.json();
-  // });
-  return mock.getManuscriptResults(manuscriptId);
+  const res = await fetch(`${requireBaseUrl()}/api/v1/manuscripts/${manuscriptId}/results`);
+  if (!res.ok) {
+    throw new Error(`results falló con status ${res.status}`);
+  }
+  return res.json();
 }
